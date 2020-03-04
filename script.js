@@ -1,8 +1,21 @@
-let login = prompt ("Ты чьих будешь", "");
+var $start = document.querySelector('#start')
+var $game = document.querySelector('#game')
 
-let message = (login == 'Сотрудник') ? 'Привет' :
-(login == 'Директор') ? 'Здравствуйте' :
-(login == '') ? 'Нет логина' : '';
+$start.addEventListener('click', startGame)
 
-alert ( message );
+function startGame () {
+  $game.style.backgroundColor = '#fff'
+  $start.classList.add('hide')
 
+  renderBox()
+}
+
+function renderBox () {
+  var box = document.createElement ('div')
+
+  box.style.height = box.style.width = '50px'
+  box.style.position = 'absolute'
+  box.style.backgroundColor = '#000'
+
+  $game.insertAdjacentElement()
+}
