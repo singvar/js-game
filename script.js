@@ -4,23 +4,32 @@ var $time = document.querySelector('#time')
 var $result = document.querySelector('#result')
 var $timeHeader = document.querySelector('#time-header')
 var $resultHeader = document.querySelector('#result-header')
+var $gameTime = document.querySelector('#game-time')
 
 var score = 0
 var isGameStarted = false
 
 $start.addEventListener('click', startGame)
 $game.addEventListener('click', handleBoxClick)
+$gameTime.addEventListener('input', setGameTime)
 
-function startGame () {
+function show($el) {
+  $el.classList.remove('hide')
+}
+
+function hide($el) {
+  $el.classList.add('hide')
+}
+
+function startGame() {
   score = 0
   setGameTime()
-  $timeHeader.classList.remove('hide')
-  $resultHeader.classList.add('hide')
+  $gameTime.setAttribute('disabled', 'true')
   isGameStarted = true
   $game.style.backgroundColor = '#fff'
-  $start.classList.add('hide')
+  hide($start)
 
-  var interval = setInterval(function() {
+  var interval = setInterval(function () {
     var timeGame = parseFloat($time.textContent)
 
     if (timeGame <= 0) {
@@ -38,40 +47,43 @@ function setGameScore() {
   $result.textContent = score.toString()
 }
 
-function setGameTime () {
-  var time = 5
+function setGameTime() {
+  var time = +$gameTime.value
   $time.textContent = time.toFixed(1)
+  show($timeHeader)
+  hide($resultHeader)
 }
 
-function endGame () {
+function endGame() {
   isGameStarted = false
   setGameScore()
-  $start.classList.remove('hide')
+  $gameTime.removeAttribute('disabled')
+  show($start)
   $game.innerHTML = ''
   $game.style.backgroundColor = '#ccc'
-  $timeHeader.classList.add('hide')
-  $resultHeader.classList.remove('hide')
+  hide($timeHeader)
+  show($resultHeader)
 }
 
-function handleBoxClick (event) {
+function handleBoxClick(event) {
   if (!isGameStarted) {
     return
   }
 
   if (event.target.dataset.box) {
-    score++
-    renderBox()
+    score++;
+    renderBox();
   }
 }
 
-function renderBox () {
-  $game.innerHTML = ''
-  var box = document.createElement ('div')
+function renderBox() {
+  $game.innerHTML = '';
+  var box = document.createElement('div')
   var boxSize = getRandom(30, 100)
   var gameSize = $game.getBoundingClientRect()
   var maxTop = gameSize.height - boxSize
   var maxLeft = gameSize.width - boxSize
-  var boxColor = (Math.random().toString(16) + '000000').substring(2,8).toUpperCase()
+  var boxColor = Math.random().toString(16).substring(2, 8).toUpperCase()
 
   box.style.height = box.style.width = boxSize + 'px'
   box.style.position = 'absolute'
